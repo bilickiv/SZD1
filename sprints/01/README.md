@@ -1,12 +1,17 @@
 # Sprint 1 – Problémafeltárás
 
-Ez a könyvtár a Sprint 1-hez kapcsolódó jegyzetek és státusz dokumentálására szolgál. A kötelező leadandó artefaktumok a repository gyökerében és a kijelölt mappákban találhatók.
+Ez a mappa tartalmazza a Sprint 1 összes leadandóját. A beadáshoz minden kötelező artefaktumnak itt kell lennie, a gyökérben csak a `course.yaml` marad.
 
 ## Ellenőrző lista
-- [ ] `course.yaml` frissítve a hallgató adataival és track választással
-- [ ] `ai/usage_plan.yaml` és legalább 3 bejegyzés az `ai/ai_log.jsonl`-ben
-- [ ] Minimum 5 interjú JSON fájl az `interviews/` mappában
-- [ ] `market/competitors.csv` legalább 3 versenytárssal
-- [ ] Legalább egy ADR az `architecture/adr/` mappában
-- [ ] `prd.yaml` a kutatási tanulságokkal
-- [ ] `python scripts/validate.py --sprint 1` sikeresen lefut
+- [ ] `sprints/01/prd.yaml` kitöltve (problem, target_audience, value_proposition, scope, insights)
+- [ ] Legalább **5** interjú JSON (`sprints/01/interviews/`), sémának megfelelően
+- [ ] Legalább **3** versenytárs sor a `sprints/01/market/competitors.csv` fájlban
+- [ ] Legalább **1** ADR Markdown a `sprints/01/architecture/adr/` mappában
+- [ ] `sprints/01/ai/usage_plan.yaml` + `ai_log.jsonl` ≥ N bejegyzéssel
+- [ ] `python scripts/validate.py --sprint 1` PASS eredménnyel fut
+- [ ] Pull Request a `main` ágra, zöld CI státusszal
+
+## Jegyzetek
+- Interjúk felvétele csak hozzájárulással történhet, a leadott jegyzőkönyvek anonimizáltak legyenek.
+- MI eszközbe ne adj át személyazonosításra alkalmas adatot.
+- Ha a validátor hibát jelez, először futtasd újra lokálisan a saját módosításaid után, majd javítsd a jelzett pontokat.

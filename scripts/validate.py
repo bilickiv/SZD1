@@ -16,6 +16,11 @@ except ImportError as exc:  # pragma: no cover
     raise
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+SPRINT_ONE_DIR = REPO_ROOT / "sprints" / "01"
+AI_DIR = SPRINT_ONE_DIR / "ai"
+INTERVIEWS_DIR = SPRINT_ONE_DIR / "interviews"
+MARKET_DIR = SPRINT_ONE_DIR / "market"
+ADR_DIR = SPRINT_ONE_DIR / "architecture" / "adr"
 
 
 def load_yaml(path: Path) -> dict:
@@ -28,7 +33,8 @@ def load_yaml(path: Path) -> dict:
         raise ValueError(f"Hibás YAML formátum: {path}\n{exc}") from exc
 
 
-def validate_course(course_path: Path) -> int:
+def validate_course() -> int:
+    course_path = REPO_ROOT / "course.yaml"
     data = load_yaml(course_path)
     if not isinstance(data, dict):
         raise ValueError("course.yaml tartalma nem objektum.")
@@ -66,7 +72,8 @@ def validate_course(course_path: Path) -> int:
     return int(log_min)
 
 
-def validate_prd(prd_path: Path) -> None:
+def validate_prd() -> None:
+    prd_path = SPRINT_ONE_DIR / "prd.yaml"
     data = load_yaml(prd_path)
     if not isinstance(data, dict):
         raise ValueError("prd.yaml tartalma nem objektum.")
@@ -87,19 +94,27 @@ def validate_prd(prd_path: Path) -> None:
     ensure(["scope", "out"])
     ensure(["first_tech_decision_ref"])
 
-    ref = data["first_tech_decision_ref"]
-    ref_path = REPO_ROOT / ref
-    if not ref_path.exists():
-        raise ValueError(f"A hivatkozott ADR fájl nem található: {ref}")
+    ref_value = data["first_tech_decision_ref"]
+    if not isinstance(ref_value, str) or not ref_value.strip():
+        raise ValueError("first_tech_decision_ref mezőnek nem üres sztringnek kell lennie.")
+
+    # Támogassuk a repo-root és a sprint-mappához viszonyított hivatkozást is.
+    candidates = [REPO_ROOT / ref_value, SPRINT_ONE_DIR / ref_value]
+    if not any(candidate.exists() for candidate in candidates):
+        raise ValueError(
+            "A first_tech_decision_ref által hivatkozott ADR nem található. "
+            "Elvárt útvonal például: sprints/01/architecture/adr/0001-first-tech-choice.md"
+        )
 
 
-def validate_ai_usage(plan_path: Path) -> None:
-    load_yaml(plan_path)
+def validate_ai_usage() -> None:
+    load_yaml(AI_DIR / "usage_plan.yaml")
 
 
-def validate_ai_log(log_path: Path, min_entries: int) -> None:
+def validate_ai_log(min_entries: int) -> None:
+    log_path = AI_DIR / "ai_log.jsonl"
     if not log_path.exists():
-        raise ValueError("Hiányzó AI napló: ai/ai_log.jsonl")
+        raise ValueError("Hiányzó AI napló: sprints/01/ai/ai_log.jsonl")
 
     entries = []
     with log_path.open("r", encoding="utf-8") as handle:
@@ -122,8 +137,11 @@ def validate_ai_log(log_path: Path, min_entries: int) -> None:
         )
 
 
-def validate_interviews(directory: Path) -> None:
-    files = sorted(directory.glob("*.json"))
+def validate_interviews() -> None:
+    if not INTERVIEWS_DIR.exists():
+        raise ValueError("Hiányzó mappa: sprints/01/interviews")
+
+    files = sorted(INTERVIEWS_DIR.glob("*.json"))
     if len(files) < 5:
         raise ValueError(f"Legalább 5 interjú fájl szükséges, jelenleg {len(files)} található.")
 
@@ -135,21 +153,22 @@ def validate_interviews(directory: Path) -> None:
                 raise ValueError(f"Érvénytelen JSON az interjú fájlban: {path}\n{exc}") from exc
         required_keys = {"id", "date", "method", "participant", "consent", "insights", "pain_points"}
         if missing := required_keys - data.keys():
-            raise ValueError(f"Interjú fájl hiányzó mezők ({path}): {', '.join(sorted(missing))}")
+            raise ValueError(f"Interjú fájl hiányzó mezők ({path.name}): {', '.join(sorted(missing))}")
         if not isinstance(data["participant"], dict):
-            raise ValueError(f"participant mezőnek objektumnak kell lennie: {path}")
+            raise ValueError(f"participant mezőnek objektumnak kell lennie: {path.name}")
         for key in ("pseudonym", "segment"):
             if not data["participant"].get(key):
-                raise ValueError(f"participant.{key} hiányzik: {path}")
+                raise ValueError(f"participant.{key} hiányzik: {path.name}")
         for key in ("insights", "pain_points"):
             value = data[key]
             if not isinstance(value, list) or not value:
-                raise ValueError(f"{key} mező üres vagy nem lista: {path}")
+                raise ValueError(f"{key} mező üres vagy nem lista: {path.name}")
 
 
-def validate_competitors(csv_path: Path) -> None:
+def validate_competitors() -> None:
+    csv_path = MARKET_DIR / "competitors.csv"
     if not csv_path.exists():
-        raise ValueError("Hiányzó market/competitors.csv fájl")
+        raise ValueError("Hiányzó market/competitors.csv fájl a sprints/01/market mappában")
 
     with csv_path.open("r", encoding="utf-8") as handle:
         reader = list(csv.reader(handle))
@@ -163,20 +182,25 @@ def validate_competitors(csv_path: Path) -> None:
         raise ValueError("A versenytárs CSV-ben legalább három versenytárs legyen.")
 
 
-def validate_adr(directory: Path) -> None:
-    files = list(directory.glob("*.md"))
+def validate_adr() -> None:
+    if not ADR_DIR.exists():
+        raise ValueError("Hiányzó ADR mappa: sprints/01/architecture/adr")
+    files = list(ADR_DIR.glob("*.md"))
     if not files:
-        raise ValueError("Legalább egy ADR markdown fájlnak lennie kell az architecture/adr könyvtárban.")
+        raise ValueError("Legalább egy ADR markdown fájlnak lennie kell a sprints/01/architecture/adr könyvtárban.")
 
 
 def validate_sprint_one() -> None:
-    min_entries = validate_course(REPO_ROOT / "course.yaml")
-    validate_prd(REPO_ROOT / "prd.yaml")
-    validate_ai_usage(REPO_ROOT / "ai" / "usage_plan.yaml")
-    validate_ai_log(REPO_ROOT / "ai" / "ai_log.jsonl", min_entries)
-    validate_interviews(REPO_ROOT / "interviews")
-    validate_competitors(REPO_ROOT / "market" / "competitors.csv")
-    validate_adr(REPO_ROOT / "architecture" / "adr")
+    if not SPRINT_ONE_DIR.exists():
+        raise ValueError("Hiányzik a sprints/01 mappa")
+
+    min_entries = validate_course()
+    validate_prd()
+    validate_ai_usage()
+    validate_ai_log(min_entries)
+    validate_interviews()
+    validate_competitors()
+    validate_adr()
 
 
 def main() -> None:
