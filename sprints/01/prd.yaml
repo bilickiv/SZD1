@@ -37,7 +37,7 @@ success_metrics:
 risks:
   - "Adatvédelmi elvárások az egyetemi szabályzatok miatt"
   - "A felhasználók meglévő munkafolyamatainak megváltoztatása ellenállást válthat ki"
-first_tech_decision_ref: "architecture/adr/0001-first-tech-choice.md"
+first_tech_decision_ref: "sprints/01/architecture/adr/0001-first-tech-choice.md"
 research_summary:
   insights:
     - "A hallgatók ~60%-a jelenleg Google Sheetben vezeti a forrásokat, ami nehezen kereshető."
