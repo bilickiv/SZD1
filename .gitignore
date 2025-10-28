@@ -15,3 +15,6 @@ __pycache__/
 # Ignore local student repos
 1-sprint/
 hallgatok/
+reviews/
+scripts/
+validate_sprint.py
