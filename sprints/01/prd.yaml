@@ -1,0 +1,47 @@
+meta:
+  version: "0.1"
+  last_updated: "2025-02-14"
+problem:
+  statement: "A magyar mérnökinformatikus hallgatók számára a szakdolgozati források rendszerezése és hivatkozásainak kezelése széttagolt és időrabló feladat, ami csúszásokhoz és minőségi problémákhoz vezet."
+target_audience:
+  personas:
+    - name: "Anna, a kutató alapszakos"
+      segment: "Harmadéves mérnökinformatikus hallgató, aki a szakdolgozatához gyűjt forrásokat."
+      needs:
+        - "Gyors forrásgyűjtés megbízható jegyzeteléssel"
+        - "Automatikus hivatkozásgenerálás különböző formátumokhoz"
+        - "Egyszerű együttműködés konzulenssel"
+    - name: "Bence, az esti képzésen"
+      segment: "Munka mellett tanuló levelezős hallgató."
+      needs:
+        - "Időhatékony anyagfeldolgozás"
+        - "Offline hozzáférés a jegyzetekhez"
+value_proposition:
+  concise: "A ResearchFlow egy felhőalapú kutatási munkafolyamat-kezelő, amely összefogja a források gyűjtését, jegyzetelését és hivatkozás-generálását, így a hallgatók 30%-kal gyorsabban tudnak haladni a szakdolgozatukkal a manuális táblázatokhoz képest."
+  differentiators:
+    - "Kontextusérzékeny MI-ajánlások a jegyzetek rendszerezéséhez"
+    - "Közös munkafelület konzulensi megjegyzésekkel"
+scope:
+  in:
+    - "Források rögzítése böngészőből vagy kézi űrlapból"
+    - "Jegyzetek és címkék kezelése"
+    - "Automatikus hivatkozás generálás APA és IEEE formátumban"
+  out:
+    - "Offline desktop alkalmazás"
+    - "Teljes szövegű PDF-szerkesztés"
+    - "Automatikus plágium-ellenőrzés"
+success_metrics:
+  - "≥10 korai tesztelő aktívan használja a ResearchFlow-t a szakdolgozat előkészítéséhez."
+  - "A tesztelők átlagos elégedettsége ≥4/5 az onboarding után."
+  - "A forrásbeviteli idő 30%-kal csökken a kontrollcsoporthoz képest."
+risks:
+  - "Adatvédelmi elvárások az egyetemi szabályzatok miatt"
+  - "A felhasználók meglévő munkafolyamatainak megváltoztatása ellenállást válthat ki"
+first_tech_decision_ref: "sprints/01/architecture/adr/0001-first-tech-choice.md"
+research_summary:
+  insights:
+    - "A hallgatók ~60%-a jelenleg Google Sheetben vezeti a forrásokat, ami nehezen kereshető."
+    - "Az interjúalanyok fele külön eszközt használ jegyzetelésre, ami duplikált munkát okoz."
+  pain_points:
+    - "Hosszú idő a hivatkozások formázása"
+    - "Nehezen megosztható a konzulensekkel a munka aktuális állapota"
