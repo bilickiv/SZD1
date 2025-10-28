@@ -1,0 +1,10 @@
+# Local environment
+.env
+
+# OS junk
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
